@@ -10,6 +10,7 @@ import (
 
 type block struct {
 	Index        int
+	Initials	 string
 	Age          int
 	Height       float32
 	Weight       float32
@@ -31,6 +32,7 @@ type chain struct {
 func calculateHash(b block) string {
 	var BlockData = []string{
 		strconv.Itoa(b.Index),
+		b.Initials,
 		strconv.Itoa(b.Age),
 		b.Time,
 		strconv.FormatFloat(float64(b.Height), 'f', -1, 32),
@@ -67,13 +69,14 @@ func addBlock(AddedBlock block, TargetChain *chain) {
 func generateBlock(previousBlock block, data []interface{}) block {
 	NewBlock := block{
 		Index:        data[0].(int),
-		Age:          data[1].(int),
-		Height:       data[2].(float32),
-		Weight:       data[3].(float32),
+		Initials:	  data[1].(string),
+		Age:          data[2].(int),
+		Height:       data[3].(float32),
+		Weight:       data[4].(float32),
 		Time:         time.Now().String(),
 		PreviousHash: previousBlock.CurrentHash,
-		Medications:  data[4].([]string),
-		Conditions:   data[5].([]string),
+		Medications:  data[5].([]string),
+		Conditions:   data[6].([]string),
 	}
 
 	NewBlock.CurrentHash = calculateHash(NewBlock)
@@ -83,6 +86,7 @@ func generateBlock(previousBlock block, data []interface{}) block {
 func main() {
 	GenesisBlock := block{
 		Index:        0,
+		Initials:	  "SP",
 		Age:          62,
 		Height:       173.4,
 		Weight:       78.2,
@@ -103,7 +107,7 @@ func main() {
 	}
 
 	info := []interface{}{
-		1, 63,
+		1, "SP", 63,
 		float32(173.4), float32(78.0),
 		[]string{"medication1", "medication2", "new medication"},
 		[]string{"destructive disease"},
