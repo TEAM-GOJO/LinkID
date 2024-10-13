@@ -36,10 +36,10 @@ func calculateHash(b block) string {
 		record += blockData[i]
 	}
 	for j := 0; j < len(b.Medications); j++ {
-		record += blockData[j]
+		record += blockData.Medications[j]
 	}
 	for k := 0; k < len(b.Conditions); k++ {
-		record += blockData[k]
+		record += blockData.Conditions[k]
 	}
 	h := sha256.New()
 	h.Write([]byte(record))
@@ -63,12 +63,9 @@ func generateBlock(i []interface) block {
 
 func main() {
 	info := []interface{
-		0,
-		62,
-		173.4,
-		78.2,
-		"", // Need to untangle messy entanglement for hash management
-		"",
+		0, 62,
+		173.4, 78.2,
+		"", "",
 		[]string{"chug jug", "med mist"},
 		[]string{"skill issue"},
 	}
