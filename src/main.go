@@ -25,6 +25,7 @@ type chain struct {
 	Genesis		 block
 	Head         block
 	Previous     block
+	Chain		 []interface{}
 }
 
 func calculateHash(b block) string {
@@ -56,8 +57,15 @@ func calculateHash(b block) string {
 	return hex.EncodeToString(hashed)
 }
 
+func addBlock(AddedBlock block, TargetChain chain) {
+	TargetChain.Chain = append(TargetChain.Chain, AddedBlock)
+	TargetChain.Previous = TargetChain.Head
+	TargetChain.Head = AddedBlock
+	TargetChain.BlockCount = TargetChain.BlockCount + 1
+} 
+
 func generateBlock(previousBlock block, data []interface{}) block {
-	newBlock := block{
+	NewBlock := block{
 		Index:        data[0].(int),
 		Age:          data[1].(int),
 		Height:       data[2].(float32),
@@ -68,8 +76,8 @@ func generateBlock(previousBlock block, data []interface{}) block {
 		Conditions:   data[5].([]string),
 	}
 
-	newBlock.CurrentHash = calculateHash(newBlock)
-	return newBlock
+	NewBlock.CurrentHash = calculateHash(NewBlock)
+	return NewBlock
 }
 
 func main() {
@@ -93,8 +101,8 @@ func main() {
 		[]string{"destructive disease"},
 	}
 
-	newBlock := generateBlock(genesisBlock, info)
+	NewBlock := generateBlock(genesisBlock, info)
 
 	fmt.Printf("Genesis Block: %+v\n", genesisBlock)
-	fmt.Printf("New Block: %+v\n", newBlock)
+	fmt.Printf("New Block: %+v\n", NewBlock)
 }
