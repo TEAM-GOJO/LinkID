@@ -20,8 +20,15 @@ type block struct {
 	Conditions   []string
 }
 
+type chain struct {
+	BlockCount   int
+	Genesis		 block
+	Head         block
+	Previous     block
+}
+
 func calculateHash(b block) string {
-	var blockData = []string{
+	var BlockData = []string{
 		strconv.Itoa(b.Index),
 		strconv.Itoa(b.Age),
 		b.Time,
@@ -31,7 +38,7 @@ func calculateHash(b block) string {
 	}
 
 	var record string
-	for _, data := range blockData {
+	for _, data := range BlockData {
 		record += data
 	}
 
@@ -82,7 +89,7 @@ func main() {
 	info := []interface{}{
 		1, 63,
 		float32(173.4), float32(78.0),
-		[]string{"medication1", "medication2"},
+		[]string{"medication1", "medication2", "new medication"},
 		[]string{"destructive disease"},
 	}
 
