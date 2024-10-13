@@ -22,10 +22,10 @@ type block struct {
 
 type chain struct {
 	BlockCount   int
-	Genesis		 block
+	Genesis      block
 	Head         block
 	Previous     block
-	Chain		 []interface{}
+	Chain        []block
 }
 
 func calculateHash(b block) string {
@@ -57,12 +57,12 @@ func calculateHash(b block) string {
 	return hex.EncodeToString(hashed)
 }
 
-func addBlock(AddedBlock block, TargetChain chain) {
+func addBlock(AddedBlock block, TargetChain *chain) {
 	TargetChain.Chain = append(TargetChain.Chain, AddedBlock)
 	TargetChain.Previous = TargetChain.Head
 	TargetChain.Head = AddedBlock
 	TargetChain.BlockCount = TargetChain.BlockCount + 1
-} 
+}
 
 func generateBlock(previousBlock block, data []interface{}) block {
 	NewBlock := block{
@@ -95,11 +95,11 @@ func main() {
 	GenesisBlock.CurrentHash = calculateHash(GenesisBlock)
 
 	TestChain := chain{
-		BlockCount:   0,
-		Genesis:      GenesisBlock,
-		Head:         GenesisBlock,
-		Previous:     nil,
-		Chain		 []interface{GenesisBlock},
+		BlockCount: 0,
+		Genesis:    GenesisBlock,
+		Head:       GenesisBlock,
+		Previous:   GenesisBlock,
+		Chain:      []block{GenesisBlock}, // Changed to []block
 	}
 
 	info := []interface{}{
@@ -111,12 +111,12 @@ func main() {
 
 	NewBlock := generateBlock(GenesisBlock, info)
 
-	fmt.Printf("Genesis Block: %+v\n", GenesisBlock)
-	fmt.Printf()
-	fmt.Printf("Head Block: %+v\n",TestChain.Head)
-	fmt.Printf()
-	fmt.Printf("New Block: %+v\n", NewBlock)
-	fmt.Printf()
-	addBlock(NewBlock, TestChain)
-	fmt.Printf("Head Block: %+v\n", TestChain.Head)
+	fmt.Printf("Genesis Block: %+v\n\n", GenesisBlock)
+	fmt.Printf("Head Block (before): %+v\n\n", TestChain.Head)
+	fmt.Printf("New Block: %+v\n\n", NewBlock)
+
+	addBlock(NewBlock, &TestChain) // Pass the chain by reference using &
+
+	fmt.Printf("Head Block (after): %+v\n", TestChain.Head)
+	fmt.Printf("Block Count: %d\n", TestChain.BlockCount)
 }
