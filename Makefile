@@ -4,9 +4,9 @@ GOARCH=amd64
 all: build
 
 build:
-	@echo "Compiling src/main.go into ./main..."
-	GOARCH=$(ARCH) GOOS=$(OS) go build -o main src/main.go
+	@echo "Compiling src/blockchain.go into ./blockchain..."
+	GOARCH=$(ARCH) GOOS=$(OS) go build -o blockchain src/blockchain.go
 
 run:
-	@echo "Running src/main.go"
-	go run src/main.go
+	@echo "Running src/blockchain.go"
+	go run src/blockchain.go
