@@ -81,7 +81,7 @@ func generateBlock(previousBlock block, data []interface{}) block {
 }
 
 func main() {
-	genesisBlock := block{
+	GenesisBlock := block{
 		Index:        0,
 		Age:          62,
 		Height:       173.4,
@@ -92,7 +92,15 @@ func main() {
 		Conditions:   []string{"destructive disease"},
 	}
 
-	genesisBlock.CurrentHash = calculateHash(genesisBlock)
+	GenesisBlock.CurrentHash = calculateHash(GenesisBlock)
+
+	TestChain := chain{
+		BlockCount:   0,
+		Genesis:      GenesisBlock,
+		Head:         GenesisBlock,
+		Previous:     nil,
+		Chain		 []interface{GenesisBlock},
+	}
 
 	info := []interface{}{
 		1, 63,
@@ -101,8 +109,14 @@ func main() {
 		[]string{"destructive disease"},
 	}
 
-	NewBlock := generateBlock(genesisBlock, info)
+	NewBlock := generateBlock(GenesisBlock, info)
 
-	fmt.Printf("Genesis Block: %+v\n", genesisBlock)
+	fmt.Printf("Genesis Block: %+v\n", GenesisBlock)
+	fmt.Printf()
+	fmt.Printf("Head Block: %+v\n",TestChain.Head)
+	fmt.Printf()
 	fmt.Printf("New Block: %+v\n", NewBlock)
+	fmt.Printf()
+	addBlock(NewBlock, TestChain)
+	fmt.Printf("Head Block: %+v\n", TestChain.Head)
 }
