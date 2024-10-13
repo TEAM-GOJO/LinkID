@@ -1,24 +1,23 @@
-// PROOF OF CONCEPT
-
 package main
 
 import (
-	"fmt"
 	"crypto/sha256"
+	"encoding/hex"
+	"fmt"
 	"strconv"
 	"time"
 )
 
 type block struct {
-	Index int
-	Age int
-	Height float32
-	Weight float32
-	Time string
+	Index        int
+	Age          int
+	Height       float32
+	Weight       float32
+	Time         string
 	PreviousHash string
-	CurrentHash string
-	Medications []string
-	Conditions []string
+	CurrentHash  string
+	Medications  []string
+	Conditions   []string
 }
 
 func calculateHash(b block) string {
@@ -26,47 +25,69 @@ func calculateHash(b block) string {
 		strconv.Itoa(b.Index),
 		strconv.Itoa(b.Age),
 		b.Time,
-		strconv.Format(b.Height, 'f', -1, 32),
-		strconv.Format(b.Weight, 'f', -1, 32),
+		strconv.FormatFloat(float64(b.Height), 'f', -1, 32),
+		strconv.FormatFloat(float64(b.Weight), 'f', -1, 32),
 		b.PreviousHash,
-		b.CurrentHash,
 	}
+
 	var record string
-	for i := 0; i < len(blockData); i++ {
-		record += blockData[i]
+	for _, data := range blockData {
+		record += data
 	}
-	for j := 0; j < len(b.Medications); j++ {
-		record += blockData.Medications[j]
+
+	for _, med := range b.Medications {
+		record += med
 	}
-	for k := 0; k < len(b.Conditions); k++ {
-		record += blockData.Conditions[k]
+
+	for _, cond := range b.Conditions {
+		record += cond
 	}
+
 	h := sha256.New()
 	h.Write([]byte(record))
 	hashed := h.Sum(nil)
 	return hex.EncodeToString(hashed)
 }
 
-func generateBlock(i []interface) block {
-	var newBlock block
-	newBlock.Index = i[0] // int
-	newBlock.Age = i[1] // int
-	newBlock.Height = i[2] // float32, cm
-	newBlock.Weight = i[3] // float32, kg0
-	newBlock.Time = time.Now().string()// string
-	newBlock.PreviousHash = i[4] //string
-	newBlock.CurrentHash = i[5] // string
-	newBlock.Medications = i[6] // []string
-	newBlock.Conditions = i[7] // []string
+func generateBlock(previousBlock block, data []interface{}) block {
+	newBlock := block{
+		Index:        data[0].(int),
+		Age:          data[1].(int),
+		Height:       data[2].(float32),
+		Weight:       data[3].(float32),
+		Time:         time.Now().String(),
+		PreviousHash: previousBlock.CurrentHash,
+		Medications:  data[4].([]string),
+		Conditions:   data[5].([]string),
+	}
+
+	newBlock.CurrentHash = calculateHash(newBlock)
 	return newBlock
 }
 
 func main() {
-	info := []interface{
-		0, 62,
-		173.4, 78.2,
-		"", "",
-		[]string{"chug jug", "med mist"},
-		[]string{"skill issue"},
+	genesisBlock := block{
+		Index:        0,
+		Age:          62,
+		Height:       173.4,
+		Weight:       78.2,
+		Time:         time.Now().String(),
+		PreviousHash: "",
+		Medications:  []string{"medication1", "medication2"},
+		Conditions:   []string{"destructive disease"},
 	}
+
+	genesisBlock.CurrentHash = calculateHash(genesisBlock)
+
+	info := []interface{}{
+		1, 63,
+		float32(173.4), float32(78.0),
+		[]string{"medication1", "medication2"},
+		[]string{"destructive disease"},
+	}
+
+	newBlock := generateBlock(genesisBlock, info)
+
+	fmt.Printf("Genesis Block: %+v\n", genesisBlock)
+	fmt.Printf("New Block: %+v\n", newBlock)
 }
