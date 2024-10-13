@@ -1,5 +1,7 @@
 # LinkID-Blockchain
 
+Blockchain system for MediLink
+
 ## Makefile Variables for Compilation Recipe
 
 Configurations for compiling the LinkID source code via Makefile
