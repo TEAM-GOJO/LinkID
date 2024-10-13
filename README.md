@@ -2,6 +2,8 @@
 
 ## Makefile Variables for Compilation Recipe
 
+Configurations for compiling the LinkID source code via Makefile
+
 ### Linux (default) 🐧
 ```
 OS=linux
