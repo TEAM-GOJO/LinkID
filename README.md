@@ -6,19 +6,26 @@ Blockchain system for MediLink
 
 Configurations for compiling the LinkID source code via Makefile
 
-### Linux (default) 🐧
+### Architecture
+
+
+
+
+### OS
+
+- Linux (default) 🐧
 ```
 OS=linux
 ARCH=amd64
 ```
 
-### MacOS 🍎
+- MacOS 🍎
 ```
 OS=darwin
 ARCH=arm64
 ```
 
-### Windows 🪟
+- Windows 🪟
 ```
 OS=windows
 ARCH=i386
