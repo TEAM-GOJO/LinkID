@@ -21,7 +21,7 @@ OS=darwin
 OS=windows
 ```
 
-### Makefile Variables (Architecture)
+## Makefile Variables (Architecture)
 
 | GOARCH        | Out of the Box | 32-bit | 64-bit |
 | :------------ | :------------: | :----: | :----: |
@@ -50,8 +50,3 @@ OS=windows
 | `sparc64`     |                |        | ✅      |
 | `wasm`        | ✅              |        | ✅      |
 
-### Windows 🪟
-```
-OS=windows
-ARCH=i386
-```
