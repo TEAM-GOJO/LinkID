@@ -13,7 +13,7 @@ Configurations for compiling the LinkID source code via Makefile
 
 ### OS
 
-- Linux (default) 🐧
+> Linux (default) 🐧
 ```
 OS=linux
 ARCH=amd64
