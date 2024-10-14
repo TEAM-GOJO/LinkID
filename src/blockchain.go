@@ -59,7 +59,7 @@ func calculateHash(b block) string {
 	return hex.EncodeToString(hashed)
 }
 
-func addBlock(AddedBlock block, TargetChain *chain) {
+func addBlockToChain(AddedBlock block, TargetChain *chain) {
 	TargetChain.Chain = append(TargetChain.Chain, AddedBlock)
 	TargetChain.Previous = TargetChain.Head
 	TargetChain.Head = AddedBlock
@@ -119,7 +119,7 @@ func main() {
 	fmt.Printf("Head Block (before): %+v\n\n", TestChain.Head)
 	fmt.Printf("New Block: %+v\n\n", NewBlock)
 
-	addBlock(NewBlock, &TestChain) // Pass the chain by reference using &
+	addBlockToChain(NewBlock, &TestChain) // Pass the chain by reference using &
 
 	fmt.Printf("Head Block (after): %+v\n", TestChain.Head)
 	fmt.Printf("Block Count: %d\n", TestChain.BlockCount)
