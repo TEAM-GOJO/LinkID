@@ -23,32 +23,32 @@ OS=windows
 
 ## Makefile Variables (Architecture)
 
-| GOARCH        | Out of the Box | 32-bit | 64-bit |
-| :------------ | :------------: | :----: | :----: |
-| `386`         | ✅              | ✅      |        |
-| `amd64`       | ✅              |        | ✅      |
-| `amd64p32`    |                | ✅      |        |
-| `arm`         | ✅              | ✅      |        |
-| `arm64`       | ✅              |        | ✅      |
-| `arm64be`     |                |        | ✅      |
-| `armbe`       |                | ✅      |        |
-| `loong64`     |                |        | ✅      |
-| `mips`        | ✅              | ✅      |        |
-| `mips64`      | ✅              |        | ✅      |
-| `mips64le`    | ✅              |        | ✅      |
-| `mips64p32`   |                | ✅      |        |
-| `mips64p32le` |                | ✅      |        |
-| `mipsle`      | ✅              | ✅      |        |
-| `ppc`         |                | ✅      |        |
-| `ppc64`       | ✅              |        | ✅      |
-| `ppc64le`     | ✅              |        | ✅      |
-| `riscv`       |                | ✅      |        |
-| `riscv64`     | ✅              |        | ✅      |
-| `s390`        |                | ✅      |        |
-| `s390x`       | ✅              |        | ✅      |
-| `sparc`       |                | ✅      |        |
-| `sparc64`     |                |        | ✅      |
-| `wasm`        | ✅              |        | ✅      |
+| GOARCH Variable       | Processor Name   | 32-bit    | 64-bit    |
+| :-------------------- | :--------------: | :-------: | :-------: |
+| `ARCH=386`            | Intel 386        | ✅        |           |
+| `ARCH=amd64`          | AMD64            |           | ✅        |
+| `ARCH=amd64p32`       | AMD64 (32-bit)   | ✅        |           |
+| `ARCH=arm`            | ARM              | ✅        |           |
+| `ARCH=arm64`          | ARM64            |           | ✅        |
+| `ARCH=arm64be`        | ARM64 (big-endian)|          | ✅        |
+| `ARCH=armbe`          | ARM (big-endian) | ✅        |           |
+| `ARCH=loong64`        | Loongson 64-bit  |           | ✅        |
+| `ARCH=mips`           | MIPS             | ✅        |           |
+| `ARCH=mips64`         | MIPS64           |           | ✅        |
+| `ARCH=mips64le`       | MIPS64 (little-endian) |    | ✅        |
+| `ARCH=mips64p32`      | MIPS64 (32-bit)  | ✅        |           |
+| `ARCH=mips64p32le`    | MIPS64 (32-bit little-endian)| ✅      |   |
+| `ARCH=mipsle`         | MIPS (little-endian)| ✅      |          |
+| `ARCH=ppc`            | PowerPC          | ✅        |           |
+| `ARCH=ppc64`          | PowerPC 64       |           | ✅        |
+| `ARCH=ppc64le`        | PowerPC 64 (little-endian) | | ✅        |
+| `ARCH=riscv`          | RISC-V           | ✅        |           |
+| `ARCH=riscv64`        | RISC-V 64        |           | ✅        |
+| `ARCH=s390`           | IBM System/390   | ✅        |           |
+| `ARCH=s390x`          | IBM System/390x  |           | ✅        |
+| `ARCH=parc`           | SPARC            | ✅        |           |
+| `ARCH=sparc64`        | SPARC64          |           | ✅        |
+| `ARCH=wasm`           | WebAssembly      | ✅        |           |
 
 [Source](https://gist.github.com/asukakenji/f15ba7e588ac42795f421b48b8aede63#file-0-go-os-arch-md)
 
