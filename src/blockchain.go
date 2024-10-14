@@ -10,7 +10,7 @@ import (
 
 type block struct {
 	Index        int
-	Initials	 string
+	Initials     string
 	Age          int
 	Height       float32
 	Weight       float32
@@ -22,11 +22,11 @@ type block struct {
 }
 
 type chain struct {
-	BlockCount   int
-	Genesis      block
-	Head         block
-	Previous     block
-	Chain        []block
+	BlockCount int
+	Genesis    block
+	Head       block
+	Previous   block
+	Chain      []block
 }
 
 func calculateHash(b block) string {
@@ -63,13 +63,13 @@ func addBlockToChain(AddedBlock block, TargetChain *chain) {
 	TargetChain.Chain = append(TargetChain.Chain, AddedBlock)
 	TargetChain.Previous = TargetChain.Head
 	TargetChain.Head = AddedBlock
-	TargetChain.BlockCount = TargetChain.BlockCount + 1
+	TargetChain.BlockCount++
 }
 
 func generateBlock(previousBlock block, data []interface{}) block {
 	NewBlock := block{
 		Index:        data[0].(int),
-		Initials:	  data[1].(string),
+		Initials:     data[1].(string),
 		Age:          data[2].(int),
 		Height:       data[3].(float32),
 		Weight:       data[4].(float32),
@@ -83,10 +83,48 @@ func generateBlock(previousBlock block, data []interface{}) block {
 	return NewBlock
 }
 
+// Probably not even needed actually. Just here just in case we need to mine
+func mineBlock(previousBlock block, data []interface{}, difficulty int) block {
+	var nonce int
+	var NewBlock block
+
+	for {
+		NewBlock = block{
+			Index:        data[0].(int),
+			Initials:     data[1].(string),
+			Age:          data[2].(int),
+			Height:       data[3].(float32),
+			Weight:       data[4].(float32),
+			Time:         time.Now().String(),
+			PreviousHash: previousBlock.CurrentHash,
+			Medications:  data[5].([]string),
+			Conditions:   data[6].([]string),
+		}
+
+		NewBlock.CurrentHash = calculateHash(NewBlock)
+
+		if NewBlock.CurrentHash[:difficulty] == string(make([]byte, difficulty)) {
+			break
+		}
+		nonce++
+	}
+
+	return NewBlock
+}
+
+func getBlockByHash(TargetChain chain, hash string) (block, bool) {
+	for _, b := range TargetChain.Chain {
+		if b.CurrentHash == hash {
+			return b, true
+		}
+	}
+	return block{}, false
+}
+
 func main() {
 	GenesisBlock := block{
 		Index:        0,
-		Initials:	  "SP",
+		Initials:     "SP",
 		Age:          62,
 		Height:       173.4,
 		Weight:       78.2,
@@ -103,7 +141,7 @@ func main() {
 		Genesis:    GenesisBlock,
 		Head:       GenesisBlock,
 		Previous:   GenesisBlock,
-		Chain:      []block{GenesisBlock}, // Changed to []block
+		Chain:      []block{GenesisBlock},
 	}
 
 	info := []interface{}{
@@ -119,8 +157,15 @@ func main() {
 	fmt.Printf("Head Block (before): %+v\n\n", TestChain.Head)
 	fmt.Printf("New Block: %+v\n\n", NewBlock)
 
-	addBlockToChain(NewBlock, &TestChain) // Pass the chain by reference using &
+	addBlockToChain(NewBlock, &TestChain)
 
 	fmt.Printf("Head Block (after): %+v\n", TestChain.Head)
 	fmt.Printf("Block Count: %d\n", TestChain.BlockCount)
+
+	retrievedBlock, found := getBlockByHash(TestChain, NewBlock.CurrentHash)
+	if found {
+		fmt.Printf("Retrieved Block: %+v\n", retrievedBlock)
+	} else {
+		fmt.Println("Block not found.")
+	}
 }
