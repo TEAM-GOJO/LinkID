@@ -2,7 +2,7 @@
 
 Blockchain system for MediLink
 
-## Makefile Variables `OS` (GOOS)
+## Makefile Variables for `OS` (GOOS)
 
 Common Operating System configurations for compiling the LinkID source code via Makefile. If you want to compile the code on an operating system not listed below, please check out this [list](https://pkg.go.dev/internal/platform) for a list of valid `GOOS` and `GOARCH` combinations.
 
