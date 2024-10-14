@@ -50,5 +50,3 @@ OS=windows
 | `ARCH=sparc64`        | SPARC64          |           | ✅        |
 | `ARCH=wasm`           | WebAssembly      | ✅        |           |
 
-[Source](https://gist.github.com/asukakenji/f15ba7e588ac42795f421b48b8aede63#file-0-go-os-arch-md)
-
