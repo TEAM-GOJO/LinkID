@@ -132,32 +132,134 @@ func getBlockByHash(TargetChain chain, hash string) (block, bool) {
 	return block{}, false
 }
 
-func exportChainJSON(TargetChain chain, EncryptMode bool) error {
-	dir := "./enc"
+func loadGenesisFromFile(filePath string) (block, error) {
+	file, err := ioutil.ReadFile(filePath)
+	if err != nil {
+		return block{}, err
+	}
+
+	var genesisData block
+	err = json.Unmarshal(file, &genesisData)
+	if err != nil {
+		return block{}, err
+	}
+
+	return genesisData, nil
+}
+
+func generateChainID() (int, error) {
+	dir := "./records"
+	err := os.MkdirAll(dir, os.ModePerm)
+	if err != nil {
+		return 0, err
+	}
+
+	for {
+		chainID := rand.Intn(90000000) + 10000000
+		encFilePath := filepath.Join(dir, strconv.Itoa(chainID) + ".enc")
+		if _, err := os.Stat(encFilePath); os.IsNotExist(err) {
+			return chainID, nil
+		}
+	}
+}
+
+func generateKeyPair() (string, string, error) {
+	key := make([]byte, 32)
+	_, err := rand.Read(key)
+	if err != nil {
+		return "", "", err
+	}
+	return hex.EncodeToString(key), hex.EncodeToString(key), nil
+}
+
+func encrypt(data []byte, keyString string) ([]byte, error) {
+	key, _ := hex.DecodeString(keyString)
+	block, err := aes.NewCipher(key)
+	if err != nil {
+		return nil, err
+	}
+
+	gcm, err := cipher.NewGCM(block)
+	if err != nil {
+		return nil, err
+	}
+
+	nonce := make([]byte, gcm.NonceSize())
+	if _, err = io.ReadFull(rand.Reader, nonce); err != nil {
+		return nil, err
+	}
+
+	return gcm.Seal(nonce, nonce, data, nil), nil
+}
+
+func decrypt(ciphertext []byte, keyString string) ([]byte, error) {
+	key, _ := hex.DecodeString(keyString)
+	block, err := aes.NewCipher(key)
+	if err != nil {
+		return nil, err
+	}
+
+	gcm, err := cipher.NewGCM(block)
+	if err != nil {
+		return nil, err
+	}
+
+	nonceSize := gcm.NonceSize()
+	if len(ciphertext) < nonceSize {
+		return nil, errors.New("ciphertext too short")
+	}
+
+	nonce, ciphertext := ciphertext[:nonceSize], ciphertext[nonceSize:]
+	return gcm.Open(nil, nonce, ciphertext, nil)
+}
+
+func exportEncryptedChain(TargetChain chain, key string) error {
+	dir := "./records"
 	err := os.MkdirAll(dir, os.ModePerm)
 	if err != nil {
 		return err
 	}
 
-	filePath := filepath.Join(dir, "chain.json")
-
-	file, err := os.Create(filePath)
-	if err != nil {
-		return err
-	}
-	defer file.Close()
+	filePath := filepath.Join(dir, strconv.Itoa(TargetChain.ChainID) + ".enc")
 
 	chainJSON, err := json.MarshalIndent(TargetChain, "", "  ")
 	if err != nil {
 		return err
 	}
 
-	_, err = file.Write(chainJSON)
+	encryptedData, err := encrypt(chainJSON, key)
+	if err != nil {
+		return err
+	}
+
+	err = ioutil.WriteFile(filePath, encryptedData, 0644)
 	if err != nil {
 		return err
 	}
 
 	return nil
+}
+
+func loadEncryptedChain(id string, key string) (chain, error) {
+	filePath := filepath.Join("./enc", id+".enc")
+
+	encryptedData, err := ioutil.ReadFile(filePath)
+	if err != nil {
+		return chain{}, err
+	}
+
+	decryptedData, err := decrypt(encryptedData, key)
+	if err != nil {
+		return chain{}, err
+	}
+
+	var TargetChain chain
+	err = json.Unmarshal(decryptedData, &TargetChain)
+	if err != nil {
+		return chain{}, err
+	}
+
+	return TargetChain, nil
 }
 
 func main() {
