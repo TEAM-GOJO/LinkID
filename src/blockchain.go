@@ -241,7 +241,7 @@ func exportEncryptedChain(TargetChain chain, key string) error {
 }
 
 func loadEncryptedChain(id string, key string) (chain, error) {
-	filePath := filepath.Join("./enc", id+".enc")
+	filePath := filepath.Join("./records", id+".enc")
 
 	encryptedData, err := ioutil.ReadFile(filePath)
 	if err != nil {
@@ -299,7 +299,6 @@ func main() {
 		fmt.Println("Public Key:", publicKey)
 		fmt.Println("Private Key:", privateKey)
 
-		// Export encrypted chain
 		err = exportEncryptedChain(TestChain, privateKey)
 		if err != nil {
 			fmt.Println("Error exporting encrypted chain:", err)
