@@ -124,8 +124,32 @@ func getBlockByHash(TargetChain chain, hash string) (block, bool) {
 	return block{}, false
 }
 
-func exportChainJSON(TargetChain chain) {
+func exportChainJSON(TargetChain chain) error {
+	dir := "./enc"
+	err := os.MkdirAll(dir, os.ModePerm)
+	if err != nil {
+		return err
+	}
 
+	filePath := filepath.Join(dir, "chain.json")
+
+	file, err := os.Create(filePath)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	chainJSON, err := json.MarshalIndent(TargetChain, "", "  ")
+	if err != nil {
+		return err
+	}
+
+	_, err = file.Write(chainJSON)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func main() {
