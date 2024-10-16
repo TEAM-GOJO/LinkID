@@ -263,50 +263,60 @@ func loadEncryptedChain(id string, key string) (chain, error) {
 }
 
 func main() {
-	GenesisBlock := block{
-		Index:        0,
-		Initials:     "SP",
-		Age:          62,
-		Height:       173.4,
-		Weight:       78.2,
-		Time:         time.Now().String(),
-		PreviousHash: "",
-		Medications:  []string{"medication1", "medication2"},
-		Conditions:   []string{"destructive disease"},
+	createCommand := flag.String("c", "", "Create a new genesis block with the path to the input JSON file.")
+	accessCommand := flag.String("a", "", "Access an existing chain by ID.")
+	key := flag.String("k", "", "Private key for decrypting the chain.")
+	flag.Parse()
+
+	if *createCommand != "" {
+		GenesisBlock, err := loadGenesisFromFile(*createCommand)
+		if err != nil {
+			fmt.Println("Error loading genesis data:", err)
+			return
+		}
+
+		GenesisBlock.Index = 0
+		GenesisBlock.Time = time.Now().String()
+		GenesisBlock.PreviousHash = ""
+		GenesisBlock.CurrentHash = calculateHash(GenesisBlock)
+
+		ChainID := generateChainID()
+		TestChain := chain{
+			ChainID:    ChainID,
+			BlockCount: 0,
+			Genesis:    GenesisBlock,
+			Head:       GenesisBlock,
+			Previous:   GenesisBlock,
+			Chain:      []block{GenesisBlock},
+		}
+
+		publicKey, privateKey, err := generateKeyPair()
+		if err != nil {
+			fmt.Println("Error generating key pair:", err)
+			return
+		}
+
+		fmt.Println("Public Key:", publicKey)
+		fmt.Println("Private Key:", privateKey)
+
+		// Export encrypted chain
+		err = exportEncryptedChain(TestChain, privateKey)
+		if err != nil {
+			fmt.Println("Error exporting encrypted chain:", err)
+			return
+		}
+
+		fmt.Println("Genesis block created and saved with Chain ID:", ChainID)
 	}
 
-	GenesisBlock.CurrentHash = calculateHash(GenesisBlock)
+	if *accessCommand != "" && *key != "" {
+		TargetChain, err := loadEncryptedChain(*accessCommand, *key)
+		if err != nil {
+			fmt.Println("Error accessing chain:", err)
+			return
+		}
 
-	TestChain := chain{
-		BlockCount: 0,
-		Genesis:    GenesisBlock,
-		Head:       GenesisBlock,
-		Previous:   GenesisBlock,
-		Chain:      []block{GenesisBlock},
-	}
-
-	info := []interface{}{
-		1, "SP", 63,
-		float32(173.4), float32(78.0),
-		[]string{"medication1", "medication2", "new medication"},
-		[]string{"destructive disease"},
-	}
-
-	NewBlock := generateBlock(GenesisBlock, info)
-
-	fmt.Printf("Genesis Block: %+v\n\n", GenesisBlock)
-	fmt.Printf("Head Block (before): %+v\n\n", TestChain.Head)
-	fmt.Printf("New Block: %+v\n\n", NewBlock)
-
-	addBlockToChain(NewBlock, &TestChain)
-
-	fmt.Printf("Head Block (after): %+v\n", TestChain.Head)
-	fmt.Printf("Block Count: %d\n", TestChain.BlockCount)
-
-	retrievedBlock, found := getBlockByHash(TestChain, NewBlock.CurrentHash)
-	if found {
-		fmt.Printf("Retrieved Block: %+v\n", retrievedBlock)
-	} else {
-		fmt.Println("Block not found.")
+		chainJSON, _ := json.MarshalIndent(TargetChain, "", "  ")
+		fmt.Println("Decrypted chain content:", string(chainJSON))
 	}
 }
