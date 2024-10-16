@@ -1,12 +1,17 @@
 package main
 
 import (
+	"crypto/aes"
+	"crypto/cipher"
+	"crypto/rand"
 	"crypto/sha256"
 	"encoding/hex"
 	"fmt"
 	"strconv"
 	"time"
 	"os"
+	"io"
+	"errors"
 	"path/filepath"
 	"encoding/json"
 )
@@ -124,7 +129,7 @@ func getBlockByHash(TargetChain chain, hash string) (block, bool) {
 	return block{}, false
 }
 
-func exportChainJSON(TargetChain chain) error {
+func exportChainJSON(TargetChain chain, EncryptMode bool) error {
 	dir := "./enc"
 	err := os.MkdirAll(dir, os.ModePerm)
 	if err != nil {
