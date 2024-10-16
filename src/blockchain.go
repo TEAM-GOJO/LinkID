@@ -6,6 +6,9 @@ import (
 	"fmt"
 	"strconv"
 	"time"
+	"os"
+	"path/filepath"
+	"encoding/json"
 )
 
 type block struct {
@@ -119,6 +122,10 @@ func getBlockByHash(TargetChain chain, hash string) (block, bool) {
 		}
 	}
 	return block{}, false
+}
+
+func exportChainJSON(TargetChain chain) {
+
 }
 
 func main() {
