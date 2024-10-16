@@ -7,13 +7,15 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"fmt"
+	"io"
+	"io/ioutil"
+	"os"
+	"encoding/json"
+	"errors"
 	"strconv"
 	"time"
-	"os"
-	"io"
-	"errors"
 	"path/filepath"
-	"encoding/json"
+	"flag"
 )
 
 type block struct {
@@ -30,6 +32,7 @@ type block struct {
 }
 
 type chain struct {
+	ChainID	   int
 	BlockCount int
 	Genesis    block
 	Head       block
