@@ -1,6 +1,6 @@
 # LinkID-Blockchain [![Go Report Card](https://goreportcard.com/badge/github.com/TEAM-GOJO/LinkID-Blockchain)](https://goreportcard.com/report/github.com/TEAM-GOJO/LinkID-Blockchain)
 
-AES encryption enhanced Blockchain system for MediLink
+The LinkID Blockchain system is an AES encryption enhanced Blockchain system for MediLink to ensure secure containment of medical records.
 
 ## Makefile Variables for `OS` (GOOS)
 
