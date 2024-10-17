@@ -1,0 +1,8 @@
+{
+    "Initials": "SP",
+    "Age": 62,
+    "Height": 173.4,
+    "Weight": 78.2,
+    "Medications": ["medication1", "medication2"],
+    "Conditions": ["destructive disease"]
+  }

@@ -343,7 +343,6 @@ func main() {
 	}
 
 	if *addBlockCommand != "" && *blockChainID != "" && *key != "" {
-		// Load the block data from the specified file
 		newBlock, err := loadBlockFromFile(*addBlockCommand)
 		if err != nil {
 			fmt.Println("Error loading block from file:", err)
