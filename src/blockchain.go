@@ -6,17 +6,17 @@ import (
 	"crypto/rand"
 	"crypto/sha256"
 	"encoding/hex"
+	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
+	"math/big"
 	"os"
-	"encoding/json"
-	"errors"
+	"path/filepath"
 	"strconv"
 	"time"
-	"path/filepath"
 	"flag"
-	"math/big"
 )
 
 type block struct {
@@ -33,7 +33,7 @@ type block struct {
 }
 
 type chain struct {
-	ChainID	   int
+	ChainID    int
 	BlockCount int
 	Genesis    block
 	Head       block
@@ -95,7 +95,6 @@ func generateBlock(previousBlock block, data []interface{}) block {
 	return NewBlock
 }
 
-// Probably not even needed actually. Just here just in case we need to mine
 func mineBlock(previousBlock block, data []interface{}, difficulty int) block {
 	var nonce int
 	var NewBlock block
@@ -170,7 +169,6 @@ func generateChainID() (int, error) {
 		}
 	}
 }
-
 
 func generateKeyPair() (string, string, error) {
 	key := make([]byte, 32)
@@ -292,7 +290,7 @@ func main() {
 	addBlockCommand := flag.String("addBlock", "", "Add a block to the chain with the path to the input JSON file.")
 	blockChainID := flag.String("id", "", "Chain ID for adding the block or accessing the chain.")
 	key := flag.String("k", "", "Private key for decrypting the chain.")
-	
+
 	flag.Parse()
 
 	if *createCommand != "" {
@@ -315,7 +313,7 @@ func main() {
 
 		TestChain := chain{
 			ChainID:    ChainID,
-			BlockCount: 0,
+			BlockCount: 1,
 			Genesis:    GenesisBlock,
 			Head:       GenesisBlock,
 			Previous:   GenesisBlock,
@@ -337,38 +335,45 @@ func main() {
 			return
 		}
 
-		fmt.Println("Genesis block created and saved with Chain ID:", ChainID)
-	}
+		fmt.Println("Genesis block created and chain exported successfully.")
+	} else if *accessCommand != "" && *key != "" {
+		TargetChain, err := loadEncryptedChain(*accessCommand, *key)
+		if err != nil {
+			fmt.Println("Error loading encrypted chain:", err)
+			return
+		}
 
-	if *accessCommand != "" && *blockChainID != "" && *key != "" {
+		fmt.Println("Chain ID:", TargetChain.ChainID)
+		fmt.Println("Block Count:", TargetChain.BlockCount)
+		fmt.Println("Genesis Block:", TargetChain.Genesis)
+
+		for _, block := range TargetChain.Chain {
+			fmt.Println("Block:", block)
+		}
+	} else if *addBlockCommand != "" && *blockChainID != "" {
 		TargetChain, err := loadEncryptedChain(*blockChainID, *key)
 		if err != nil {
-			fmt.Println("Error accessing chain:", err)
+			fmt.Println("Error loading encrypted chain:", err)
 			return
 		}
 
-		chainJSON, _ := json.MarshalIndent(TargetChain, "", "  ")
-		fmt.Println("Decrypted chain content:", string(chainJSON))
-	}
-
-	if *addBlockCommand != "" && *blockChainID != "" && *key != "" {
-		newBlock, err := loadBlockFromFile(*addBlockCommand)
+		newBlockData, err := loadBlockFromFile(*addBlockCommand)
 		if err != nil {
-			fmt.Println("Error loading block from file:", err)
+			fmt.Println("Error loading block data:", err)
 			return
 		}
 
-		TargetChain, err := loadEncryptedChain(*blockChainID, *key)
-		if err != nil {
-			fmt.Println("Error accessing chain:", err)
-			return
-		}
+		addedBlock := generateBlock(TargetChain.Head, []interface{}{
+			newBlockData.Index,
+			newBlockData.Initials,
+			newBlockData.Age,
+			newBlockData.Height,
+			newBlockData.Weight,
+			newBlockData.Medications,
+			newBlockData.Conditions,
+		})
 
-		newBlock.Index = TargetChain.BlockCount
-		newBlock.PreviousHash = TargetChain.Head.CurrentHash
-		newBlock.CurrentHash = calculateHash(newBlock)
-
-		addBlockToChain(newBlock, &TargetChain)
+		addBlockToChain(addedBlock, &TargetChain)
 
 		err = exportEncryptedChain(TargetChain, *key)
 		if err != nil {
@@ -376,13 +381,8 @@ func main() {
 			return
 		}
 
-		fmt.Println("Block successfully added to the chain and chain updated.")
-	}
-
-	if *addBlockCommand != "" && (*blockChainID == "" || *key == "") {
-		fmt.Println("Error: Both blockchain ID and private key are required to add a block.")
-	}
-	if *accessCommand != "" && (*blockChainID == "" || *key == "") {
-		fmt.Println("Error: Both blockchain ID and private key are required to access a chain.")
+		fmt.Println("Block added successfully.")
+	} else {
+		fmt.Println("Please provide a valid command.")
 	}
 }
