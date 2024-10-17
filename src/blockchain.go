@@ -262,6 +262,21 @@ func loadEncryptedChain(id string, key string) (chain, error) {
 	return TargetChain, nil
 }
 
+func loadBlockFromFile(filePath string) (block, error) {
+	file, err := ioutil.ReadFile(filePath)
+	if err != nil {
+		return block{}, err
+	}
+
+	var newBlock block
+	err = json.Unmarshal(file, &newBlock)
+	if err != nil {
+		return block{}, err
+	}
+
+	return newBlock, nil
+}
+
 func main() {
 	createCommand := flag.String("c", "", "Create a new genesis block with the path to the input JSON file.")
 	accessCommand := flag.String("a", "", "Access an existing chain by ID.")
