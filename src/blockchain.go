@@ -265,7 +265,10 @@ func loadEncryptedChain(id string, key string) (chain, error) {
 func main() {
 	createCommand := flag.String("c", "", "Create a new genesis block with the path to the input JSON file.")
 	accessCommand := flag.String("a", "", "Access an existing chain by ID.")
+	addBlockCommand := flag.String("addBlock", "", "Add a block to the chain with the path to the input JSON file.")
+	blockChainID := flag.String("id", "", "Chain ID for adding the block or accessing the chain.")
 	key := flag.String("k", "", "Private key for decrypting the chain.")
+	
 	flag.Parse()
 
 	if *createCommand != "" {
@@ -280,7 +283,12 @@ func main() {
 		GenesisBlock.PreviousHash = ""
 		GenesisBlock.CurrentHash = calculateHash(GenesisBlock)
 
-		ChainID := generateChainID()
+		ChainID, err := generateChainID()
+		if err != nil {
+			fmt.Println("Error generating Chain ID:", err)
+			return
+		}
+
 		TestChain := chain{
 			ChainID:    ChainID,
 			BlockCount: 0,
@@ -308,8 +316,8 @@ func main() {
 		fmt.Println("Genesis block created and saved with Chain ID:", ChainID)
 	}
 
-	if *accessCommand != "" && *key != "" {
-		TargetChain, err := loadEncryptedChain(*accessCommand, *key)
+	if *accessCommand != "" && *blockChainID != "" && *key != "" {
+		TargetChain, err := loadEncryptedChain(*blockChainID, *key)
 		if err != nil {
 			fmt.Println("Error accessing chain:", err)
 			return
@@ -317,5 +325,41 @@ func main() {
 
 		chainJSON, _ := json.MarshalIndent(TargetChain, "", "  ")
 		fmt.Println("Decrypted chain content:", string(chainJSON))
+	}
+
+	if *addBlockCommand != "" && *blockChainID != "" && *key != "" {
+		// Load the block data from the specified file
+		newBlock, err := loadBlockFromFile(*addBlockCommand)
+		if err != nil {
+			fmt.Println("Error loading block from file:", err)
+			return
+		}
+
+		TargetChain, err := loadEncryptedChain(*blockChainID, *key)
+		if err != nil {
+			fmt.Println("Error accessing chain:", err)
+			return
+		}
+
+		newBlock.Index = TargetChain.BlockCount
+		newBlock.PreviousHash = TargetChain.Head.CurrentHash
+		newBlock.CurrentHash = calculateHash(newBlock)
+
+		addBlockToChain(newBlock, &TargetChain)
+
+		err = exportEncryptedChain(TargetChain, *key)
+		if err != nil {
+			fmt.Println("Error exporting encrypted chain:", err)
+			return
+		}
+
+		fmt.Println("Block successfully added to the chain and chain updated.")
+	}
+
+	if *addBlockCommand != "" && (*blockChainID == "" || *key == "") {
+		fmt.Println("Error: Both blockchain ID and private key are required to add a block.")
+	}
+	if *accessCommand != "" && (*blockChainID == "" || *key == "") {
+		fmt.Println("Error: Both blockchain ID and private key are required to access a chain.")
 	}
 }
