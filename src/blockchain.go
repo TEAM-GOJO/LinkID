@@ -16,6 +16,7 @@ import (
 	"time"
 	"path/filepath"
 	"flag"
+	"math/big"
 )
 
 type block struct {
@@ -154,14 +155,22 @@ func generateChainID() (int, error) {
 		return 0, err
 	}
 
+	max := big.NewInt(90000000)
+	min := 10000000
+
 	for {
-		chainID := rand.Intn(90000000) + 10000000
+		n, err := rand.Int(rand.Reader, max)
+		if err != nil {
+			return 0, err
+		}
+		chainID := int(n.Int64()) + min
 		encFilePath := filepath.Join(dir, strconv.Itoa(chainID) + ".enc")
 		if _, err := os.Stat(encFilePath); os.IsNotExist(err) {
 			return chainID, nil
 		}
 	}
 }
+
 
 func generateKeyPair() (string, string, error) {
 	key := make([]byte, 32)
