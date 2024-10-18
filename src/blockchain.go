@@ -343,13 +343,13 @@ func main() {
 			return
 		}
 
-		fmt.Println("Chain ID:", TargetChain.ChainID)
-		fmt.Println("Block Count:", TargetChain.BlockCount)
-		fmt.Println("Genesis Block:", TargetChain.Genesis)
-
-		for _, block := range TargetChain.Chain {
-			fmt.Println("Block:", block)
+		jsonData, err := json.MarshalIndent(TargetChain, "", "  ")
+		if err != nil {
+			fmt.Println("Error converting chain to JSON:", err)
+			return
 		}
+
+		fmt.Println(string(jsonData))
 	} else if *addBlockCommand != "" && *blockChainID != "" {
 		TargetChain, err := loadEncryptedChain(*blockChainID, *key)
 		if err != nil {
