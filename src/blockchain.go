@@ -50,6 +50,8 @@ func calculateHash(b block) string {
 	var BlockData = []string{
 		strconv.Itoa(b.Index),
 		b.Initials,
+		b.Sex,
+		b.Gender,
 		strconv.Itoa(b.Age),
 		b.Time,
 		strconv.FormatFloat(float64(b.Height), 'f', -1, 32),
@@ -62,12 +64,20 @@ func calculateHash(b block) string {
 		record += data
 	}
 
-	for _, med := range b.Medications {
+	for _, med := range b.Prescriptions {
 		record += med
 	}
 
 	for _, cond := range b.Conditions {
 		record += cond
+	}
+
+	for _, visit := range b.VisitLogs {
+		record += visit
+	}
+
+	for _, hist := range b.History {
+		record += hist
 	}
 
 	h := sha256.New()
@@ -92,7 +102,7 @@ func generateBlock(previousBlock block, data []interface{}) block {
 		Weight:       data[4].(float32),
 		Time:         time.Now().String(),
 		PreviousHash: previousBlock.CurrentHash,
-		Medications:  data[5].([]string),
+		Prescriptions:  data[5].([]string),
 		Conditions:   data[6].([]string),
 	}
 
@@ -113,7 +123,7 @@ func mineBlock(previousBlock block, data []interface{}, difficulty int) block {
 			Weight:       data[4].(float32),
 			Time:         time.Now().String(),
 			PreviousHash: previousBlock.CurrentHash,
-			Medications:  data[5].([]string),
+			Prescriptions:  data[5].([]string),
 			Conditions:   data[6].([]string),
 		}
 
@@ -382,7 +392,7 @@ func main() {
 			newBlockData.Age,
 			newBlockData.Height,
 			newBlockData.Weight,
-			newBlockData.Medications,
+			newBlockData.Prescriptions,
 			newBlockData.Conditions,
 		})
 
