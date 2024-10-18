@@ -360,6 +360,7 @@ func main() {
 		}
 
 		keys := map[string]string{
+			"id":	ChainID,
 			"public_key":  publicKey,
 			"private_key": privateKey,
 		}
