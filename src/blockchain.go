@@ -285,9 +285,9 @@ func loadBlockFromFile(filePath string) (block, error) {
 }
 
 func main() {
-	createCommand := flag.String("c", "", "Create a new genesis block with the path to the input JSON file.")
+	createCommand := flag.String("c", "", "Create a new chain with the path to the input JSON file.")
 	accessCommand := flag.String("a", "", "Access an existing chain by ID.")
-	addBlockCommand := flag.String("addBlock", "", "Add a block to the chain with the path to the input JSON file.")
+	addBlockCommand := flag.String("add", "", "Add a block to the chain with the path to the input JSON file.")
 	blockChainID := flag.String("id", "", "Chain ID for adding the block or accessing the chain.")
 	key := flag.String("k", "", "Private key for decrypting the chain.")
 
