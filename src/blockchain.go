@@ -29,6 +29,7 @@ type block struct {
 	Weight       	float32
 	Blood		 	string
 	Time         	string
+	Location		string
 	PreviousHash 	string
 	CurrentHash  	string
 	Prescriptions	[]string
