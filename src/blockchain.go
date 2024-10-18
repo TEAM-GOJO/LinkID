@@ -8,6 +8,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"errors"
+	"flag"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -16,7 +17,6 @@ import (
 	"path/filepath"
 	"strconv"
 	"time"
-	"flag"
 )
 
 type block struct {
@@ -58,6 +58,9 @@ func calculateHash(b block) string {
 		b.Time,
 		strconv.FormatFloat(float64(b.Height), 'f', -1, 32),
 		strconv.FormatFloat(float64(b.Weight), 'f', -1, 32),
+		strconv.FormatFloat(float64(b.BMI), 'f', -1, 32),
+		b.Blood,
+		b.Location,
 		b.PreviousHash,
 	}
 
@@ -99,13 +102,20 @@ func generateBlock(previousBlock block, data []interface{}) block {
 	NewBlock := block{
 		Index:        data[0].(int),
 		Initials:     data[1].(string),
-		Age:          data[2].(int),
-		Height:       data[3].(float32),
-		Weight:       data[4].(float32),
+		Sex:          data[2].(string),
+		Gender:       data[3].(string),
+		Age:          data[4].(int),
+		Height:       data[5].(float32),
+		Weight:       data[6].(float32),
+		BMI:          data[7].(float32),
+		Blood:        data[8].(string),
 		Time:         time.Now().String(),
+		Location:     data[9].(string),
 		PreviousHash: previousBlock.CurrentHash,
-		Prescriptions:  data[5].([]string),
-		Conditions:   data[6].([]string),
+		Prescriptions:  data[10].([]string),
+		Conditions:   data[11].([]string),
+		VisitLogs:    data[12].([]string),
+		History:      data[13].([]string),
 	}
 
 	NewBlock.CurrentHash = calculateHash(NewBlock)
@@ -120,13 +130,20 @@ func mineBlock(previousBlock block, data []interface{}, difficulty int) block {
 		NewBlock = block{
 			Index:        data[0].(int),
 			Initials:     data[1].(string),
-			Age:          data[2].(int),
-			Height:       data[3].(float32),
-			Weight:       data[4].(float32),
+			Sex:          data[2].(string),
+			Gender:       data[3].(string),
+			Age:          data[4].(int),
+			Height:       data[5].(float32),
+			Weight:       data[6].(float32),
+			BMI:          data[7].(float32),
+			Blood:        data[8].(string),
 			Time:         time.Now().String(),
+			Location:     data[9].(string),
 			PreviousHash: previousBlock.CurrentHash,
-			Prescriptions:  data[5].([]string),
-			Conditions:   data[6].([]string),
+			Prescriptions:  data[10].([]string),
+			Conditions:   data[11].([]string),
+			VisitLogs:    data[12].([]string),
+			History:      data[13].([]string),
 		}
 
 		NewBlock.CurrentHash = calculateHash(NewBlock)
@@ -307,7 +324,6 @@ func main() {
 	addBlockCommand := flag.String("add", "", "Add a block to the chain with the path to the input JSON file.")
 	blockChainID := flag.String("id", "", "Chain ID for adding the block or accessing the chain.")
 	key := flag.String("k", "", "Private key for decrypting the chain.")
-
 	flag.Parse()
 
 	if *createCommand != "" {
@@ -347,13 +363,13 @@ func main() {
 			"public_key":  publicKey,
 			"private_key": privateKey,
 		}
-	
+
 		jsonData, err := json.MarshalIndent(keys, "", "  ")
 		if err != nil {
 			fmt.Println("Error converting keys to JSON:", err)
 			return
 		}
-	
+
 		fmt.Println(string(jsonData))
 
 		err = exportEncryptedChain(TestChain, privateKey)
@@ -391,11 +407,18 @@ func main() {
 		addedBlock := generateBlock(TargetChain.Head, []interface{}{
 			newBlockData.Index,
 			newBlockData.Initials,
+			newBlockData.Sex,
+			newBlockData.Gender,
 			newBlockData.Age,
 			newBlockData.Height,
 			newBlockData.Weight,
+			newBlockData.BMI,
+			newBlockData.Blood,
+			newBlockData.Location,
 			newBlockData.Prescriptions,
 			newBlockData.Conditions,
+			newBlockData.VisitLogs,
+			newBlockData.History,
 		})
 
 		addBlockToChain(addedBlock, &TargetChain)
