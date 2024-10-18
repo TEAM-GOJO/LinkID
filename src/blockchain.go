@@ -326,16 +326,24 @@ func main() {
 			return
 		}
 
-		fmt.Println("Public Key:", publicKey)
-		fmt.Println("Private Key:", privateKey)
+		keys := map[string]string{
+			"public_key":  publicKey,
+			"private_key": privateKey,
+		}
+	
+		jsonData, err := json.MarshalIndent(keys, "", "  ")
+		if err != nil {
+			fmt.Println("Error converting keys to JSON:", err)
+			return
+		}
+	
+		fmt.Println(string(jsonData))
 
 		err = exportEncryptedChain(TestChain, privateKey)
 		if err != nil {
 			fmt.Println("Error exporting encrypted chain:", err)
 			return
 		}
-
-		fmt.Println("Genesis block created and chain exported successfully.")
 	} else if *accessCommand != "" && *key != "" {
 		TargetChain, err := loadEncryptedChain(*accessCommand, *key)
 		if err != nil {
