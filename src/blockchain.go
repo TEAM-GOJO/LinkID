@@ -359,7 +359,7 @@ func main() {
 			return
 		}
 
-		keys := map[string]string{
+		keys := map[string]interface{}{
 			"id":	ChainID,
 			"public_key":  publicKey,
 			"private_key": privateKey,
