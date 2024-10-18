@@ -27,6 +27,7 @@ type block struct {
 	Age          	int
 	Height       	float32
 	Weight       	float32
+	BMI				float32
 	Blood		 	string
 	Time         	string
 	Location		string
