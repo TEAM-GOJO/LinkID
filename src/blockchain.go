@@ -20,16 +20,21 @@ import (
 )
 
 type block struct {
-	Index        int
-	Initials     string
-	Age          int
-	Height       float32
-	Weight       float32
-	Time         string
-	PreviousHash string
-	CurrentHash  string
-	Medications  []string
-	Conditions   []string
+	Index        	int
+	Initials     	string
+	Sex			 	string
+	Gender		 	string
+	Age          	int
+	Height       	float32
+	Weight       	float32
+	Blood		 	string
+	Time         	string
+	PreviousHash 	string
+	CurrentHash  	string
+	Prescriptions	[]string
+	Conditions   	[]string
+	VisitLogs		[]string
+	History			[]string
 }
 
 type chain struct {
