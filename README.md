@@ -2,6 +2,34 @@
 
 The LinkID Blockchain system is an AES encryption enhanced blockchain system for protecting medical records through unique 8 digit id and private key pairs.
 
+## Example Medical Record
+
+Medical records are stored in the JSON format and are structured as shown below:
+
+```
+{
+  "Index": 1,
+  "Initials": "SP",
+  "Sex": "M", 
+  "Age": 62,
+  "Height": 173.4,
+  "Weight": 78.2,
+  "BMI": 26.0,
+  "Blood": "O+",
+  "Location": "San Diego",
+  "Prescriptions": ["medication1", "medication2"],
+  "Conditions": ["destructive disease"],
+  "VisitLogs": [],
+  "History": []
+}
+```
+
+Each record is treated like a "block" inside the blockchain and is given a `SHA256` hash of its own as well as a timestamp and the hash of the block before it to ensure the information is legitamate. A series of these blocks are constructed into a chain, which is encrypted using AES but is also in the JSON format in its decrypted form.
+
+```
+
+```
+
 ## Makefile Variables for `OS` (GOOS)
 
 Common Operating System configurations for compiling the LinkID source code via Makefile. If you want to compile the code on an operating system not listed below, please check out this [list](https://pkg.go.dev/internal/platform) for a list of valid `GOOS` and `GOARCH` combinations.
