@@ -27,8 +27,109 @@ Medical records are stored in the JSON format and are structured as shown below:
 
 Each record is treated like a "block" inside the blockchain and is given a `SHA256` hash of its own as well as a timestamp and the hash of the block before it to ensure the information is legitamate. A series of these blocks are constructed into a chain, which is encrypted using AES but is also in the JSON format in its decrypted form. The idea is that after every medical visit, healthcare providers will be able to authorize and update the records by adding a new block to the chain.
 
-```
-
+```json
+{
+  "ChainID": 50567633,
+  "BlockCount": 1,
+  "Genesis": {
+    "Index": 0,
+    "Initials": "SP",
+    "Sex": "M",
+    "Gender": "Male",
+    "Age": 62,
+    "Height": 173.4,
+    "Weight": 78.2,
+    "BMI": 26,
+    "Blood": "O+",
+    "Time": "2024-10-20 01:06:31.165600842 -0700 PDT m=+0.000507382",
+    "Location": "San Diego",
+    "PreviousHash": "",
+    "CurrentHash": "af1feefcc87556b30710f5c02979ffd2def067d25a14eb93b91395c5f2b2e624",
+    "Prescriptions": [
+      "medication1",
+      "medication2"
+    ],
+    "Conditions": [
+      "destructive disease"
+    ],
+    "VisitLogs": [],
+    "History": []
+  },
+  "Head": {
+    "Index": 0,
+    "Initials": "SP",
+    "Sex": "M",
+    "Gender": "Male",
+    "Age": 62,
+    "Height": 173.4,
+    "Weight": 78.2,
+    "BMI": 26,
+    "Blood": "O+",
+    "Time": "2024-10-20 01:06:31.165600842 -0700 PDT m=+0.000507382",
+    "Location": "San Diego",
+    "PreviousHash": "",
+    "CurrentHash": "af1feefcc87556b30710f5c02979ffd2def067d25a14eb93b91395c5f2b2e624",
+    "Prescriptions": [
+      "medication1",
+      "medication2"
+    ],
+    "Conditions": [
+      "destructive disease"
+    ],
+    "VisitLogs": [],
+    "History": []
+  },
+  "Previous": {
+    "Index": 0,
+    "Initials": "SP",
+    "Sex": "M",
+    "Gender": "Male",
+    "Age": 62,
+    "Height": 173.4,
+    "Weight": 78.2,
+    "BMI": 26,
+    "Blood": "O+",
+    "Time": "2024-10-20 01:06:31.165600842 -0700 PDT m=+0.000507382",
+    "Location": "San Diego",
+    "PreviousHash": "",
+    "CurrentHash": "af1feefcc87556b30710f5c02979ffd2def067d25a14eb93b91395c5f2b2e624",
+    "Prescriptions": [
+      "medication1",
+      "medication2"
+    ],
+    "Conditions": [
+      "destructive disease"
+    ],
+    "VisitLogs": [],
+    "History": []
+  },
+  "Chain": [
+    {
+      "Index": 0,
+      "Initials": "SP",
+      "Sex": "M",
+      "Gender": "Male",
+      "Age": 62,
+      "Height": 173.4,
+      "Weight": 78.2,
+      "BMI": 26,
+      "Blood": "O+",
+      "Time": "2024-10-20 01:06:31.165600842 -0700 PDT m=+0.000507382",
+      "Location": "San Diego",
+      "PreviousHash": "",
+      "CurrentHash": "af1feefcc87556b30710f5c02979ffd2def067d25a14eb93b91395c5f2b2e624",
+      "Prescriptions": [
+        "medication1",
+        "medication2"
+      ],
+      "Conditions": [
+        "destructive disease"
+      ],
+      "VisitLogs": [],
+      "History": []
+    }
+  ]
+}
 ```
 
 ## Makefile Variables for `OS` (GOOS)
