@@ -1,6 +1,6 @@
 # LinkID-Blockchain [![Go Report Card](https://goreportcard.com/badge/github.com/TEAM-GOJO/LinkID-Blockchain)](https://goreportcard.com/report/github.com/TEAM-GOJO/LinkID-Blockchain)
 
-The LinkID Blockchain system is an AES encryption enhanced Blockchain system for protecting medical records through unique 8 digit id and private key pairs.
+The LinkID Blockchain system is an AES encryption enhanced blockchain system for protecting medical records through unique 8 digit id and private key pairs.
 
 ## Makefile Variables for `OS` (GOOS)
 
