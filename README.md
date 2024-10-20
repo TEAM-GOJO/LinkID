@@ -9,14 +9,14 @@ Medical records are stored in the JSON format and are structured as shown below:
 ```
 {
   "Index": 1,
-  "Initials": "SP",
+  "Initials": "JS",
   "Sex": "M", 
   "Age": 62,
   "Height": 173.4,
   "Weight": 78.2,
   "BMI": 26.0,
   "Blood": "O+",
-  "Location": "San Diego",
+  "Location": "New York City, NY",
   "Prescriptions": ["medication1", "medication2"],
   "Conditions": ["destructive disease"],
   "VisitLogs": [],
