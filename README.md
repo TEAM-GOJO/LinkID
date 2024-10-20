@@ -6,7 +6,7 @@ The LinkID Blockchain system is an AES encryption enhanced blockchain system for
 
 ```
 (1) ./blockchain -c <genesis JSON file>
-(2)./blockchain -a <id> -k <privkey>
+(2) ./blockchain -a <id> -k <privkey>
 (3) ./blockchain -add <id> -k <privkey>
 
 1 --> Create a new chain for a user based on their genesis file (initial information)
