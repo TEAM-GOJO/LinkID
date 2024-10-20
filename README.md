@@ -33,7 +33,7 @@ Each record is treated like a "block" inside the blockchain and is given a `SHA2
   "BlockCount": 1,
   "Genesis": {
     "Index": 0,
-    "Initials": "SP",
+    "Initials": "JS",
     "Sex": "M",
     "Gender": "Male",
     "Age": 62,
@@ -42,7 +42,7 @@ Each record is treated like a "block" inside the blockchain and is given a `SHA2
     "BMI": 26,
     "Blood": "O+",
     "Time": "2024-10-20 01:06:31.165600842 -0700 PDT m=+0.000507382",
-    "Location": "San Diego",
+    "Location": "New York City, NY",
     "PreviousHash": "",
     "CurrentHash": "af1feefcc87556b30710f5c02979ffd2def067d25a14eb93b91395c5f2b2e624",
     "Prescriptions": [
@@ -57,7 +57,7 @@ Each record is treated like a "block" inside the blockchain and is given a `SHA2
   },
   "Head": {
     "Index": 0,
-    "Initials": "SP",
+    "Initials": "JS",
     "Sex": "M",
     "Gender": "Male",
     "Age": 62,
@@ -66,7 +66,7 @@ Each record is treated like a "block" inside the blockchain and is given a `SHA2
     "BMI": 26,
     "Blood": "O+",
     "Time": "2024-10-20 01:06:31.165600842 -0700 PDT m=+0.000507382",
-    "Location": "San Diego",
+    "Location": "New York City, NY",
     "PreviousHash": "",
     "CurrentHash": "af1feefcc87556b30710f5c02979ffd2def067d25a14eb93b91395c5f2b2e624",
     "Prescriptions": [
@@ -81,7 +81,7 @@ Each record is treated like a "block" inside the blockchain and is given a `SHA2
   },
   "Previous": {
     "Index": 0,
-    "Initials": "SP",
+    "Initials": "JS",
     "Sex": "M",
     "Gender": "Male",
     "Age": 62,
@@ -90,7 +90,7 @@ Each record is treated like a "block" inside the blockchain and is given a `SHA2
     "BMI": 26,
     "Blood": "O+",
     "Time": "2024-10-20 01:06:31.165600842 -0700 PDT m=+0.000507382",
-    "Location": "San Diego",
+    "Location": "New York City, NY",
     "PreviousHash": "",
     "CurrentHash": "af1feefcc87556b30710f5c02979ffd2def067d25a14eb93b91395c5f2b2e624",
     "Prescriptions": [
@@ -106,7 +106,7 @@ Each record is treated like a "block" inside the blockchain and is given a `SHA2
   "Chain": [
     {
       "Index": 0,
-      "Initials": "SP",
+      "Initials": "JS",
       "Sex": "M",
       "Gender": "Male",
       "Age": 62,
@@ -115,7 +115,7 @@ Each record is treated like a "block" inside the blockchain and is given a `SHA2
       "BMI": 26,
       "Blood": "O+",
       "Time": "2024-10-20 01:06:31.165600842 -0700 PDT m=+0.000507382",
-      "Location": "San Diego",
+      "Location": "New York City, NY",
       "PreviousHash": "",
       "CurrentHash": "af1feefcc87556b30710f5c02979ffd2def067d25a14eb93b91395c5f2b2e624",
       "Prescriptions": [
