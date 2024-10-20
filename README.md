@@ -2,6 +2,19 @@
 
 The LinkID Blockchain system is an AES encryption enhanced blockchain system for protecting medical records through unique 8 digit id and private key pairs.
 
+## Usage
+
+```
+(1) ./blockchain -c <genesis JSON file>
+(2)./blockchain -a <id> -k <privkey>
+(3) ./blockchain -add <id> -k <privkey>
+
+1 --> Create a new chain for a user based on their genesis file (initial information)
+2 --> Access a user's medical records using the 8 digit unique id and the generated private key
+3 --> Add a new record to a user's chain
+```
+
+
 ## Medical Records
 
 Medical records are stored in the JSON format and are structured as shown below:
