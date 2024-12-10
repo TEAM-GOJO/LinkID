@@ -1,3 +1,3 @@
-module github.com/TEAM-GOJO/LinkID-Blockchain
+module github.com/shuban-789/LinkID
 
 go 1.23.2
