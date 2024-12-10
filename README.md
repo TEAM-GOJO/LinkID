@@ -2,6 +2,10 @@
 
 The LinkID Blockchain system is an AES encryption enhanced blockchain system for protecting medical records through unique 8 digit id and private key pairs.
 
+## Update
+
+New repository [HERE](https://github.com/shuban-789/LinkID)
+
 ## Usage
 
 ```
